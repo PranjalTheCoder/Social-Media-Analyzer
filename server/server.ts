@@ -11,8 +11,34 @@ const app = express();
 // const PORT = process.env.PORT || 5000;
 const PORT = parseInt(process.env.PORT || "5000", 10);
 
+// Allow specific origins (Localhost + Your Production Frontend)
+const allowedOrigins = [
+  "http://localhost:5173",
+  process.env.CLIENT_URL || "", // We will set this variable in Render later
+];
+
 // 2. Middleware
-app.use(cors({ origin: "http://localhost:5173" })); // Allow Frontend
+app.use(
+  cors({
+    origin: (origin, callback) => {
+      // Allow requests with no origin (like mobile apps or curl requests)
+      if (!origin) return callback(null, true);
+      if (allowedOrigins.indexOf(origin) === -1) {
+        // For simplicity during development/testing, you might want to allow all:
+        // return callback(null, true);
+        // But for security, stick to the allowed list:
+        return callback(
+          new Error(
+            "The CORS policy for this site does not allow access from the specified Origin."
+          ),
+          false
+        );
+      }
+      return callback(null, true);
+    },
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
