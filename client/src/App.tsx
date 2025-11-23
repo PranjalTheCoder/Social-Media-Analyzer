@@ -1,35 +1,45 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { Switch, Route } from "wouter";
+import { queryClient } from "./lib/queryClient";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "@/components/ui/toaster";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import EnhancedHome from "@/pages/EnhancedHome";
+import NotFound from "@/pages/not-found";
 
-function App() {
-  const [count, setCount] = useState(0)
-
+/**
+ * App Router
+ * ----------
+ * Defines the main client-side routes.
+ */
+function Router() {
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <Switch>
+      {/* Main Dashboard */}
+      <Route path="/" component={EnhancedHome} />
+
+      {/* 404 Catch-all */}
+      <Route component={NotFound} />
+    </Switch>
+  );
 }
 
-export default App
+/**
+ * App Root
+ * --------
+ * Wraps the application in essential providers:
+ * - QueryClientProvider: For API state management
+ * - TooltipProvider: For UI tooltips
+ * - Toaster: For global notifications
+ */
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Router />
+      </TooltipProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;
