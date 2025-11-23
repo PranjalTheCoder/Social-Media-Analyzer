@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:match*",
-      "destination": "https://Social_Media_Analyzer.onrender.com/api/:match*"
+      "destination": "https://social-media-analyzer-api.onrender.com/api/:match*"
     }
   ]
 }
