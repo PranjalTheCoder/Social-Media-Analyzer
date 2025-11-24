@@ -17,18 +17,13 @@ export class PdfService {
       // The library version 1.1.1 exports a function we can call directly
       const data = await pdfParse(buffer);
 
-      // Raw PDF text often has weird spacing or excessive newlines.
-      // We clean it up to make it easier for the AI to analyze.
-      const cleanedText = data.text
-        .replace(/\s+/g, " ") // Replace multiple spaces with a single space
-        .replace(/\n\s*\n/g, "\n") // Collapse multiple empty lines into one
-        .trim();
+      // FIX: Formatting Preservation
+      // We removed the aggressive regex that stripped newlines.
+      // Now we only trim the edges, allowing the AI to see paragraphs.
+      const cleanedText = data.text.trim();
 
-      // Validation: If the PDF was just images or empty pages, this might be empty
-      if (!cleanedText || cleanedText.length === 0) {
-        throw new Error(
-          "The PDF appears to be empty or contains no readable text."
-        );
+      if (!cleanedText) {
+        throw new Error("No text content found in PDF");
       }
 
       return cleanedText;

@@ -48,14 +48,21 @@ app.get("/", (req, res) => {
 });
 
 // 3. Connect to MongoDB
-const mongoUri =
-  process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/content_analyzer";
+const mongoUri = process.env.MONGODB_URI;
 
-
-mongoose
-  .connect(mongoUri)
-  .then(() => console.log("✅ Connected to MongoDB"))
-  .catch((err) => console.error("❌ MongoDB connection error:", err));
+if (mongoUri) {
+  mongoose
+    .connect(mongoUri)
+    .then(() => console.log("✅ Connected to MongoDB"))
+    .catch((err) => {
+      console.warn(
+        "⚠️ MongoDB connection failed. Switching to In-Memory (Mock) Mode."
+      );
+      // We do NOT exit the process. We let the server run.
+    });
+} else {
+  console.warn("⚠️ No MONGODB_URI found. Running in In-Memory (Mock) Mode.");
+}
 
 // 4. Register Routes
 registerRoutes(app);
