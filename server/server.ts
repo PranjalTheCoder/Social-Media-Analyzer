@@ -42,9 +42,14 @@ app.use(
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+app.get("/", (req, res) => {
+  res.status(200).send("✅ Social Media Analyzer API is healthy and running!");
+});
+
 // 3. Connect to MongoDB
 const mongoUri =
   process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/content_analyzer";
+
 
 mongoose
   .connect(mongoUri)
