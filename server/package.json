@@ -4,8 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx watch server.ts",
-    "build": "tsc",
-    "start": "node dist/server.js"
+    "build": "echo 'No build step required for tsx'",
+    "start": "tsx server.ts"
   },
   "dependencies": {
     "@google/genai": "^1.30.0",
