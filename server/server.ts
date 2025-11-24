@@ -14,6 +14,7 @@ const PORT = parseInt(process.env.PORT || "5000", 10);
 // Allow specific origins (Localhost + Your Production Frontend)
 const allowedOrigins = [
   "http://localhost:5173",
+  "https://social-media-analyzer-silk.vercel.app",
   process.env.CLIENT_URL || "", // We will set this variable in Render later
 ];
 
