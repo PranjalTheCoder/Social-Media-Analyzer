@@ -1,100 +1,89 @@
-# Social Media Content Analyzer
+# 📊 Social Media Content Analyzer
 
-## Overview
+A full-stack web application that helps content creators optimize their social media strategy.  
+It extracts text from uploaded documents (PDFs, Images) and uses **Google Gemini AI** to generate actionable engagement tips, hooks, captions, and hashtag strategies.
 
-A web application that analyzes social media content from uploaded files (PDFs or images) and provides AI-powered suggestions to improve engagement. Users upload content files, the system extracts text using OCR or PDF parsing, sends it to Google's Gemini AI, and displays detailed recommendations for captions, hooks, hashtags, tone, and calls-to-action alongside the original extracted text.
+🔗 **Live Demo:** https://social-media-analyzer-silk.vercel.app
 
-## User Preferences
+> **⚠️ Note:** The backend is hosted on **Render’s free tier**, so the first request may take **30–50 seconds** to wake up. If you see a connection error, wait a moment and refresh.
 
-Preferred communication style: Simple, everyday language.
+---
 
-## System Architecture
+## 🚀 Features
 
-### Frontend Architecture
+- **Multi-Format Upload:** Drag & drop PDFs, JPGs, PNGs.
+- **Smart Extraction**
+  - **OCR with Tesseract.js**
+  - **PDF parsing with pdf-parse**
+- **AI-Powered Suggestions:**  
+  Improvements for captions, hooks, tone, hashtags, and more using **Gemini 2.0 Flash**.
+- **Batch File Processing:** Upload multiple files at once with progress updates.
+- **History Dashboard:** All analyses are auto-saved to MongoDB.
+- **Search in History:** Quickly filter results by filename or extracted content.
 
-**Framework & Build System**
-- React with TypeScript for type-safe component development
-- Vite as the build tool and development server for fast hot module replacement
-- Wouter for lightweight client-side routing
+---
 
-**UI Component Strategy**
-- Shadcn/ui component library for consistent, accessible UI components
-- Radix UI primitives as the foundation for complex interactive components
-- Tailwind CSS for utility-first styling
-- Simple, clean design focusing on readability
+## 🛠️ Tech Stack
 
-**State Management**
-- TanStack Query (React Query) for handling server data (fetching history, uploading files)
-- Local component state for simple UI interactions (like file dragging)
-- Custom hooks for reusable logic (e.g., `use-toast`)
+### **Frontend**
+- React 18 + Vite  
+- TypeScript  
+- Tailwind CSS + Shadcn UI  
+- TanStack Query  
 
-**Design System**
-- Custom color system using CSS variables for easy theming
-- Responsive layout that works on mobile and desktop
-- Clear visual feedback for loading states and errors
+### **Backend**
+- Node.js + Express  
+- MongoDB + Mongoose  
+- Service-Based Architecture (OCR, PDF, AI separated)
 
-### Backend Architecture
+### **AI & Processing**
+- Google Gemini 2.0 Flash  
+- Tesseract.js  
+- pdf-parse  
 
-**Server Framework**
-- Express.js on Node.js for handling API requests
-- ES Modules (import/export) enabled for modern JavaScript syntax
-- Modular route system separating API logic from server setup
+---
 
-**Service Layer Pattern**
-- **PDF Service**: Extracts text from PDF files using `pdf-parse` (custom adapter for compatibility)
-- **OCR Service**: Extracts text from images (JPG/PNG) using `tesseract.js`
-- **AI Service**: Generates engagement suggestions via Google Gemini API (lazily loaded for stability)
+### **1. Clone the Repository**
 
-**File Upload Handling**
-- Multer middleware for processing file uploads
-- In-memory storage strategy (files are processed immediately, not saved to disk)
-- Strict file type validation (PDF, JPEG, PNG only)
+```bash
+git clone https://github.com/PranjalTheCoder/Social-Media-Analyzer.git
+cd Social-Media-Analyzer
+```
 
-**API Design**
-- RESTful endpoints (`/api/upload`, `/api/upload/batch`, `/api/history`)
-- JSON response format containing extracted text and metadata
-- robust error handling to ensure the server doesn't crash on bad files
+---
 
-### Data Storage
+### **2. Backend Setup (Server)**
 
-**Database**
-- MongoDB as the NoSQL database (flexible document storage)
-- Mongoose ODM for modeling application data
+```bash
+cd server
+npm install
+```
+---
+### Create `.env` file inside `server/`:
 
-**Schema Design**
-- `Analysis` collection stores upload history
-  - `_id`: Unique MongoDB identifier
-  - `fileName`: Name of the uploaded file
-  - `fileType`: Type of file (pdf/image)
-  - `extractedText`: The raw text pulled from the file
-  - `suggestions`: AI-generated advice
-  - `sentiment`: AI analysis of tone (score and label)
-  - `wordCount`: Simple metric for content length
-  - `createdAt`: Timestamp for sorting history
+```bash
+PORT=5000
 
-**Data Access Pattern**
-- Direct Mongoose model calls (`Analysis.find()`, `Analysis.save()`)
-- Asynchronous operations with try-catch blocks for safety
+# Use local MongoDB or Atlas
+MONGODB_URI=mongodb://127.0.0.1:27017/content_analyzer
 
-### External Dependencies
+# Get your free Gemini API key:
+# https://aistudio.google.com/app/apikey
+GEMINI_API_KEY=your_google_api_key_here
+```
 
-**AI Service Integration**
-- Google Gemini API (via `@google/genai` SDK)
-- Model: `gemini-2.0-flash` for fast content generation
-- Prompts designed to ask for 5 specific categories:
-  1. Caption improvements
-  2. Hook optimization
-  3. Hashtag strategy
-  4. Tone and voice
-  5. Call-to-action suggestions
+## Start the server:
+```bash
+npm run dev
+```
 
-**Text Extraction Services**
-- **pdf-parse**: Used for reading text layers from PDF documents
-- **tesseract.js**: Used for Optical Character Recognition (reading text from images)
+--- 
 
-**Database Service**
-- Local MongoDB instance (developed on `127.0.0.1:27017`)
-- Connection managed via `MONGODB_URI` environment variable
+### 3. Frontend Setup (Client)
 
-**Authentication**
-- No user authentication is currently implemented (open access tool)
+Open a new terminal window:
+```bash
+cd client
+npm install
+npm run dev
+```
